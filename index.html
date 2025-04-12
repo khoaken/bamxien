@@ -157,11 +157,11 @@
   <script>
     let danhSachKeo = [];
     let soKeo = 0;
-
+  
     function luuKeoVaoLocalStorage() {
       localStorage.setItem('danhSachKeo', JSON.stringify(danhSachKeo));
     }
-
+  
     function taiKeoTuLocalStorage() {
       const duLieu = localStorage.getItem('danhSachKeo');
       if (duLieu) {
@@ -187,26 +187,25 @@
         }
       }
     }
-
+  
     function themKeo(keo = { sanNha: '', sanKhach: '', chap: '', taiXiu: '' }) {
       soKeo++;
-       const container = document.getElementById('danhSachKeo');
-       const keoDiv = document.createElement('div');
-       keoDiv.className = 'keo';
-       keoDiv.innerHTML = `
-          <p>
+      const container = document.getElementById('danhSachKeo');
+      const keoDiv = document.createElement('div');
+      keoDiv.className = 'keo';
+      keoDiv.innerHTML = `
+        <p>
           <strong>Kèo ${soKeo}:</strong>
           <button class="nut-xoa" onclick="xoaKeo(this)">❌</button>
-         </p>
-          <input type="text" placeholder="Sân Nhà" value="${keo.sanNha}">
-          <input type="text" placeholder="Sân Khách" value="${keo.sanKhach}">
-          <input type="text" placeholder="Kèo Chấp (vd: -0.5)" value="${keo.chap}">
-          <input type="text" placeholder="Tài/Xỉu (vd: 2.5)" value="${keo.taiXiu}">
-  `;
-        container.appendChild(keoDiv);
-}
-
-
+        </p>
+        <input type="text" placeholder="Sân Nhà" value="${keo.sanNha}">
+        <input type="text" placeholder="Sân Khách" value="${keo.sanKhach}">
+        <input type="text" placeholder="Kèo Chấp (vd: -0.5)" value="${keo.chap}">
+        <input type="text" placeholder="Tài/Xỉu (vd: 2.5)" value="${keo.taiXiu}">
+      `;
+      container.appendChild(keoDiv);
+    }
+  
     function bamXien() {
       const keos = document.querySelectorAll('.keo');
       danhSachKeo = [];
@@ -222,15 +221,15 @@
           danhSachKeo.push(keoObj);
         }
       });
-
+  
       luuKeoVaoLocalStorage();
-
+  
       if (danhSachKeo.length === 0) {
         document.getElementById('noiDungPopup').innerHTML = 'Không có kèo nào hợp lệ để xiên.';
         document.getElementById('popup').style.display = 'flex';
         return;
       }
-
+  
       let ketQuaHTML = '<h3>Kèo Xiên Random by KHOAKEN:</h3>';
       danhSachKeo.forEach((keo, i) => {
         const chonChap = keo.chap && (!keo.taiXiu || Math.random() < 0.5);
@@ -245,12 +244,12 @@
           ketQuaHTML += `<p><strong>Kèo ${i+1}:</strong> ${keo.sanNha} vs ${keo.sanKhach} | Chọn: ${chonTai ? 'Tài' : 'Xỉu'} ${keo.taiXiu}</p>`;
         }
       });
-
+  
       document.getElementById('noiDungPopup').innerHTML = ketQuaHTML;
       document.getElementById('popup').style.display = 'flex';
       luuLichSu(ketQuaHTML);
     }
-
+  
     function resetTatCa() {
       danhSachKeo = [];
       soKeo = 0;
@@ -259,19 +258,19 @@
       document.getElementById('popup').style.display = 'none';
       localStorage.removeItem('danhSachKeo');
     }
-
+  
     function luuLichSu(ketQuaHTML) {
       let lichSu = JSON.parse(localStorage.getItem('lichSuRandom') || '[]');
       lichSu.unshift({ thoiGian: new Date().toLocaleString(), ketQua: ketQuaHTML });
       if (lichSu.length > 5) lichSu = lichSu.slice(0, 5);
       localStorage.setItem('lichSuRandom', JSON.stringify(lichSu));
     }
-
+  
     function hienPopupLichSu() {
       capNhatLichSuHTML();
       document.getElementById('popupLichSu').style.display = 'flex';
     }
-
+  
     function capNhatLichSuHTML() {
       const lichSu = JSON.parse(localStorage.getItem('lichSuRandom') || '[]');
       const noiDungLichSu = document.getElementById('noiDungLichSu');
@@ -290,11 +289,12 @@
       });
       noiDungLichSu.innerHTML = html;
     }
+  
     function xoaKeo(button) {
       const keoDiv = button.closest('.keo');
-       keoDiv.remove();
-}
-
+      keoDiv.remove();
+    }
+  
     function saoChepKetQua() {
       const el = document.createElement('textarea');
       el.value = document.getElementById('noiDungPopup').innerText;
@@ -304,27 +304,29 @@
       document.body.removeChild(el);
       alert('Đã sao chép kết quả vào clipboard!');
     }
-
+  
     document.getElementById('dongPopup').addEventListener('click', () => {
       document.getElementById('popup').style.display = 'none';
     });
-
+  
     document.getElementById('dongPopupLichSu').addEventListener('click', () => {
       document.getElementById('popupLichSu').style.display = 'none';
     });
-
+  
     window.onload = () => {
+      localStorage.removeItem('danhSachKeo'); // Reset danh sách kèo khi reload
       taiKeoTuLocalStorage();
       capNhatLichSuHTML();
     };
+  
     function moHuongDan() {
-  document.getElementById('popupHuongDan').style.display = 'flex';
-}
-
-function dongHuongDan() {
-  document.getElementById('popupHuongDan').style.display = 'none';
-}
-
+      document.getElementById('popupHuongDan').style.display = 'flex';
+    }
+  
+    function dongHuongDan() {
+      document.getElementById('popupHuongDan').style.display = 'none';
+    }
   </script>
+  
 </body>
 </html>
