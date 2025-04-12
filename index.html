@@ -118,8 +118,24 @@
   <button onclick="bamXien()">Bấm Xiên</button>
   <button onclick="resetTatCa()">Reset</button>
   <button onclick="hienPopupLichSu()">Nhật Ký</button>
-  <div id="lichSu" style="margin-top: 30px;"></div>
+  <button onclick="moHuongDan()">Hướng Dẫn</button>
 
+  <div id="lichSu" style="margin-top: 30px;"></div>
+  <div id="popupHuongDan" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color: rgba(0, 0, 0, 0.7); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#1a0000; padding:10px; border-radius:10px; max-width:600px; width:90%;box-shadow: 0 0 15px rgba(255, 60, 60, 0.6)">
+      <h3>Hướng Dẫn Sử Dụng</h3>
+      <div id="noiDungHuongDan">
+        <!-- Mày tự điền hướng dẫn vào đây -->
+        <p>Phần sân nhà nhập đội đứng trước</p>
+        <p>Phần sân khách nhập đội đứng sau</p>
+        <p>Phần kèo chấp tỷ lệ giữa sân nhà trước sân khách, ví dụ Sân nhà chấp sân khách 1 trái thì nhập -1, được chấp 1 trái thì nhập +1</p>
+        <p>Phần tài xỉu chỉ nhập số</p>
+        <p>Ví dụ: Arsenal chấp Mu 0.5 Tx 2.5 thì nhập theo thứ tự: Arsenal, Mu, -0.5, 2.5</p>
+      </div>
+      <button onclick="dongHuongDan()">Đóng</button>
+    </div>
+  </div>
+  
   <!-- Popup Kết Quả -->
   <div id="popup">
     <div id="popupContent">
@@ -301,6 +317,14 @@
       taiKeoTuLocalStorage();
       capNhatLichSuHTML();
     };
+    function moHuongDan() {
+  document.getElementById('popupHuongDan').style.display = 'flex';
+}
+
+function dongHuongDan() {
+  document.getElementById('popupHuongDan').style.display = 'none';
+}
+
   </script>
 </body>
 </html>
