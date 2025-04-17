@@ -3,209 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat</title>
+  <title>Bấm Xiên by KHOAKEN</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Chat">
+  <meta name="apple-mobile-web-app-title" content="Bấm Xiên">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ChatUp</title>
+  <link rel="apple-touch-icon" href="https://i.ibb.co/W4qYqFfD/khoakenofficial.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: 'Be Vietnam Pro', sans-serif;
       padding: 20px;
+      background: #0d0000;
+      color: #f5f5f5;
     }
-    #chat {
-      border: 1px solid #ccc;
-      background: white;
-      height: 300px;
-      overflow-y: scroll;
-      margin-bottom: 10px;
-      padding: 10px;
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      color: #ff3c3c;
+      text-shadow: 0 0 10px #ff3c3c;
     }
-    .msg {
-      margin: 5px 0;
-      padding: 5px 10px;
-      border-radius: 10px;
-      max-width: 70%;
-      word-wrap: break-word;
+    .keo {
+      background: #1a0000;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(255, 60, 60, 0.3);
     }
-    .my-msg {
-      background: #DCF8C6;
-      text-align: right;
-      margin-left: auto;
-    }
-    .other-msg {
-      background: #eee;
-      text-align: left;
-      margin-right: auto;
-    }
-    #auth input, #chat-ui input {
-      width: 100%;
+    .nut-xoa {
+     float: right;
+     background: transparent;
+     color: #ff3c3c;
+     border: none;
+     font-size: 20px;
+     cursor: pointer;
+}
+    .keo input {
+      margin: 5px;
       padding: 8px;
-      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      width: calc(100% - 20px);
       box-sizing: border-box;
     }
     button {
-      padding: 8px 12px;
-      margin-top: 5px;
+      padding: 12px 25px;
+      font-size: 16px;
       cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff3c3c;
+      color: #fff;
+      font-weight: bold;
+      margin: 10px 5px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #cc0000;
+    }
+    #popup, #popupLichSu {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      display: none;
+    }
+    #popupContent, #popupLichSuContent {
+      background: #1a0000;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 90%;
+      box-shadow: 0 0 15px rgba(255, 60, 60, 0.6);
+      max-height: 80vh;
+      overflow-y: auto;
+      padding-right: 10px; /* Thêm khoảng cách cho thanh cuộn */
+    }
+    #popupContent button,
+    #popupLichSuContent button {
+      background: #ff3c3c;
+      border: none;
+      padding: 8px 15px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px auto 0;
+      display: block;
+    }
+    #popupContent button:hover,
+    #popupLichSuContent button:hover {
+      background: #cc0000;
+    }
+    #popupContent p, #popupLichSuContent p {
+      margin: 6px 0;
+      font-size: 15px;
+      color: #f5f5f5;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 28px; }
+      button { width: 100%; margin: 5px 0; }
+      .keo input { font-size: 14px; }
     }
   </style>
 </head>
 <body>
+  
+  <h1>Bấm Xiên by KHOAKEN</h1>
+  <div id="danhSachKeo"></div>
+  <button onclick="themKeo()">Thêm Kèo</button>
+  <button onclick="bamXien()">Bấm Xiên</button>
+  <button onclick="resetTatCa()">Reset</button>
+  <button onclick="hienPopupLichSu()">Nhật Ký</button>
+  <button onclick="moHuongDan()">Hướng Dẫn</button>
 
-<h2>ChatUp</h2>
+  <div id="lichSu" style="margin-top: 30px;"></div>
+  <div id="popupHuongDan" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color: rgba(0, 0, 0, 0.7); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#1a0000; padding:10px; border-radius:10px; max-width:600px; width:90%;box-shadow: 0 0 15px rgba(255, 60, 60, 0.6)">
+      <h3>Hướng Dẫn Sử Dụng</h3>
+      <div id="noiDungHuongDan">
+        <!-- Mày tự điền hướng dẫn vào đây -->
+        <p>Phần sân nhà nhập đội đứng trước</p>
+        <p>Phần sân khách nhập đội đứng sau</p>
+        <p>Phần kèo chấp tỷ lệ giữa sân nhà trước sân khách, ví dụ Sân nhà chấp sân khách 1 trái thì nhập -1, được chấp 1 trái thì nhập +1</p>
+        <p>Phần tài xỉu chỉ nhập số</p>
+        <p>Ví dụ: Arsenal chấp Mu 0.5 Tx 2.5 thì nhập theo thứ tự: Arsenal, Mu, -0.5, 2.5</p>
+      </div>
+      <button onclick="dongHuongDan()">Đóng</button>
+    </div>
+  </div>
+  
+  <!-- Popup Kết Quả -->
+  <div id="popup">
+    <div id="popupContent">
+      <div id="noiDungPopup"></div>
+      <button onclick="saoChepKetQua()">Sao chép</button>
+      <button id="dongPopup">Đóng</button>
+    </div>
+  </div>
 
-<div id="auth">
-  <h3>Đăng ký</h3>
-  <input id="signup-email" placeholder="Email">
-  <input id="signup-pass" type="password" placeholder="Mật khẩu">
-  <input id="signup-name" placeholder="Tên thật">
-  <input id="signup-dob" type="date">
-  <button onclick="signup()">Đăng ký</button>
+  <!-- Popup Lịch Sử -->
+  <div id="popupLichSu">
+    <div id="popupLichSuContent">
+      <h3 style="text-align:center">Nhật Ký Xiên Gần Đây</h3>
+      <div id="noiDungLichSu"></div>
+      <button id="dongPopupLichSu">Đóng</button>
+    </div>
+  </div>
 
-  <h3>Đăng nhập</h3>
-  <input id="login-email" placeholder="Email">
-  <input id="login-pass" type="password" placeholder="Mật khẩu">
-  <button onclick="login()">Đăng nhập</button>
-</div>
-
-<div id="chat-ui" style="display:none;">
-  <p>Xin chào, <span id="username"></span>! <button onclick="logout()">Đăng xuất</button></p>
-  <div id="chat"></div>
-  <input id="message" placeholder="Nhập tin nhắn..." onkeypress="if(event.key==='Enter') sendMessage()">
-  <button onclick="sendMessage()">Gửi</button>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAry2Wta_2_mWxfplmfnpHn3aBSpH-ZDqU",
-    authDomain: "chatup-7fed7.firebaseapp.com",
-    projectId: "chatup-7fed7",
-    storageBucket: "chatup-7fed7.appspot.com",
-    messagingSenderId: "287838782402",
-    appId: "1:287838782402:web:c4fd4b4ce02c3238530c5b",
-    measurementId: "G-2CXCQNLQXP"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Đăng ký
-  async function signup() {
-    const email = document.getElementById("signup-email").value.trim();
-    const pass = document.getElementById("signup-pass").value.trim();
-    const name = document.getElementById("signup-name").value.trim();
-    const dob = document.getElementById("signup-dob").value.trim();
-
-    if (!email || !pass || !name || !dob) {
-      alert("Vui lòng điền đầy đủ thông tin.");
-      return;
+  <script>
+    let danhSachKeo = [];
+    let soKeo = 0;
+  
+    function luuKeoVaoLocalStorage() {
+      localStorage.setItem('danhSachKeo', JSON.stringify(danhSachKeo));
     }
-    if (!email.includes("@")) {
-      alert("Email không hợp lệ.");
-      return;
+  
+    function taiKeoTuLocalStorage() {
+      const duLieu = localStorage.getItem('danhSachKeo');
+      if (duLieu) {
+        try {
+          danhSachKeo = JSON.parse(duLieu);
+          danhSachKeo.forEach((keo, index) => {
+            soKeo++;
+            const container = document.getElementById('danhSachKeo');
+            const keoDiv = document.createElement('div');
+            keoDiv.className = 'keo';
+            keoDiv.innerHTML = `
+              <p><strong>Kèo ${soKeo}:</strong></p>
+              <input type="text" placeholder="Sân Nhà" value="${keo.sanNha}">
+              <input type="text" placeholder="Sân Khách" value="${keo.sanKhach}">
+              <input type="text" placeholder="Kèo Chấp (vd: -0.5)" value="${keo.chap}">
+              <input type="text" placeholder="Tài/Xỉu (vd: 2.5)" value="${keo.taiXiu}">
+            `;
+            container.appendChild(keoDiv);
+          });
+        } catch (err) {
+          console.error("Lỗi khi parse JSON:", err);
+          danhSachKeo = [];
+        }
+      }
     }
-    if (pass.length < 6) {
-      alert("Mật khẩu phải từ 6 ký tự trở lên.");
-      return;
+  
+    function themKeo(keo = { sanNha: '', sanKhach: '', chap: '', taiXiu: '' }) {
+      soKeo++;
+      const container = document.getElementById('danhSachKeo');
+      const keoDiv = document.createElement('div');
+      keoDiv.className = 'keo';
+      keoDiv.innerHTML = `
+        <p>
+          <strong>Kèo ${soKeo}:</strong>
+          <button class="nut-xoa" onclick="xoaKeo(this)">❌</button>
+        </p>
+        <input type="text" placeholder="Sân Nhà" value="${keo.sanNha}">
+        <input type="text" placeholder="Sân Khách" value="${keo.sanKhach}">
+        <input type="text" placeholder="Kèo Chấp (vd: -0.5)" value="${keo.chap}">
+        <input type="text" placeholder="Tài/Xỉu (vd: 2.5)" value="${keo.taiXiu}">
+      `;
+      container.appendChild(keoDiv);
     }
-
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      await setDoc(doc(db, "users", cred.user.uid), { name, dob, email });
-      alert("Đăng ký thành công!");
-    } catch (err) {
-      alert("Lỗi: " + err.message);
-    }
-  }
-
-  // Đăng nhập
-  async function login() {
-    const email = document.getElementById("login-email").value.trim();
-    const pass = document.getElementById("login-pass").value.trim();
-
-    if (!email || !pass) {
-      alert("Vui lòng nhập email và mật khẩu.");
-      return;
-    }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (err) {
-      alert("Lỗi: " + err.message);
-    }
-  }
-
-  // Đăng xuất
-  async function logout() {
-    await signOut(auth);
-    location.reload();
-  }
-
-  // Gửi tin nhắn
-  async function sendMessage() {
-    const msg = document.getElementById("message").value.trim();
-    const user = auth.currentUser;
-    if (!user || !msg) return;
-
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-    const userName = userSnap.data().name;
-
-    await addDoc(collection(db, "messages"), {
-      name: userName,
-      text: msg,
-      time: new Date()
-    });
-
-    document.getElementById("message").value = "";
-  }
-
-  // Theo dõi trạng thái đăng nhập
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      document.getElementById("auth").style.display = "none";
-      document.getElementById("chat-ui").style.display = "block";
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-      const userName = userSnap.data().name || "Ẩn danh";
-
-      document.getElementById("username").innerText = userName;
-
-      const q = query(collection(db, "messages"), orderBy("time"));
-      onSnapshot(q, (snapshot) => {
-        const chat = document.getElementById("chat");
-        chat.innerHTML = "";
-
-        snapshot.forEach(docSnap => {
-          const data = docSnap.data();
-          const div = document.createElement("div");
-          const date = data.time?.toDate();
-          const timeStr = date ? date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
-
-          div.classList.add("msg");
-          div.classList.add(data.name === userName ? "my-msg" : "other-msg");
-          div.innerText = `[${timeStr}] ${data.name}: ${data.text}`;
-          chat.appendChild(div);
-        });
-
-        chat.scrollTop = chat.scrollHeight;
+  
+    function bamXien() {
+      const keos = document.querySelectorAll('.keo');
+      danhSachKeo = [];
+      keos.forEach(k => {
+        const inputs = k.querySelectorAll('input');
+        const keoObj = {
+          sanNha: inputs[0].value.trim(),
+          sanKhach: inputs[1].value.trim(),
+          chap: inputs[2].value.trim(),
+          taiXiu: inputs[3].value.trim()
+        };
+        if (keoObj.sanNha && keoObj.sanKhach && (keoObj.chap || keoObj.taiXiu)) {
+          danhSachKeo.push(keoObj);
+        }
       });
+  
+      luuKeoVaoLocalStorage();
+  
+      if (danhSachKeo.length === 0) {
+        document.getElementById('noiDungPopup').innerHTML = 'Không có kèo nào hợp lệ để xiên.';
+        document.getElementById('popup').style.display = 'flex';
+        return;
+      }
+  
+      let ketQuaHTML = '<h3>Kèo Xiên Random by KHOAKEN:</h3>';
+      danhSachKeo.forEach((keo, i) => {
+        const chonChap = keo.chap && (!keo.taiXiu || Math.random() < 0.5);
+        if (chonChap) {
+          const chapSo = parseFloat(keo.chap);
+          const chonChuNha = Math.random() < 0.5;
+          const tenDoi = chonChuNha ? keo.sanNha : keo.sanKhach;
+          const chapValue = chonChuNha ? chapSo : -chapSo;
+          ketQuaHTML += `<p><strong>Kèo ${i+1}:</strong> ${keo.sanNha} vs ${keo.sanKhach} | Chọn: ${tenDoi} ${chapValue > 0 ? '+' : ''}${chapValue}</p>`;
+        } else {
+          const chonTai = Math.random() < 0.5;
+          ketQuaHTML += `<p><strong>Kèo ${i+1}:</strong> ${keo.sanNha} vs ${keo.sanKhach} | Chọn: ${chonTai ? 'Tài' : 'Xỉu'} ${keo.taiXiu}</p>`;
+        }
+      });
+  
+      document.getElementById('noiDungPopup').innerHTML = ketQuaHTML;
+      document.getElementById('popup').style.display = 'flex';
+      luuLichSu(ketQuaHTML);
     }
-  });
-
-  window.signup = signup;
-  window.login = login;
-  window.sendMessage = sendMessage;
-  window.logout = logout;
-</script>
-
+  
+    function resetTatCa() {
+      danhSachKeo = [];
+      soKeo = 0;
+      document.getElementById('danhSachKeo').innerHTML = '';
+      document.getElementById('noiDungPopup').innerHTML = '';
+      document.getElementById('popup').style.display = 'none';
+      localStorage.removeItem('danhSachKeo');
+    }
+  
+    function luuLichSu(ketQuaHTML) {
+      let lichSu = JSON.parse(localStorage.getItem('lichSuRandom') || '[]');
+      lichSu.unshift({ thoiGian: new Date().toLocaleString(), ketQua: ketQuaHTML });
+      if (lichSu.length > 5) lichSu = lichSu.slice(0, 5);
+      localStorage.setItem('lichSuRandom', JSON.stringify(lichSu));
+    }
+  
+    function hienPopupLichSu() {
+      capNhatLichSuHTML();
+      document.getElementById('popupLichSu').style.display = 'flex';
+    }
+  
+    function capNhatLichSuHTML() {
+      const lichSu = JSON.parse(localStorage.getItem('lichSuRandom') || '[]');
+      const noiDungLichSu = document.getElementById('noiDungLichSu');
+      if (!lichSu.length) {
+        noiDungLichSu.innerHTML = "<p>Chưa có lịch sử xiên nào.</p>";
+        return;
+      }
+      let html = '';
+      lichSu.forEach(item => {
+        html += `
+          <div style="border: 1px solid #ff3c3c; border-radius: 10px; padding: 10px; margin-bottom: 10px;">
+            <p style="font-size: 14px; color: #bbb;">${item.thoiGian}</p>
+            ${item.ketQua}
+          </div>
+        `;
+      });
+      noiDungLichSu.innerHTML = html;
+    }
+  
+    function xoaKeo(button) {
+      const keoDiv = button.closest('.keo');
+      keoDiv.remove();
+    }
+  
+    function saoChepKetQua() {
+      const el = document.createElement('textarea');
+      el.value = document.getElementById('noiDungPopup').innerText;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      alert('Đã sao chép kết quả vào clipboard!');
+    }
+  
+    document.getElementById('dongPopup').addEventListener('click', () => {
+      document.getElementById('popup').style.display = 'none';
+    });
+  
+    document.getElementById('dongPopupLichSu').addEventListener('click', () => {
+      document.getElementById('popupLichSu').style.display = 'none';
+    });
+  
+    window.onload = () => {
+      localStorage.removeItem('danhSachKeo'); // Reset danh sách kèo khi reload
+      taiKeoTuLocalStorage();
+      capNhatLichSuHTML();
+    };
+  
+    function moHuongDan() {
+      document.getElementById('popupHuongDan').style.display = 'flex';
+    }
+  
+    function dongHuongDan() {
+      document.getElementById('popupHuongDan').style.display = 'none';
+    }
+  </script>
+  
 </body>
 </html>
